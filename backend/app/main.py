@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1 import chat
 
-app = FastAPI(title="INSPOL")
+app = FastAPI(title="INSPOL API")
 
 app.add_middleware(
     CORSMiddleware,

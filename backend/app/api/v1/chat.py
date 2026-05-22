@@ -9,21 +9,20 @@ class Consulta(BaseModel):
     consulta: str
 
 @router.post("/multimodal")
-async def multimodal_chat(data: Consulta):
+async def chat(data: Consulta):
     try:
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
+                {"role": "system", "content": "Eres un asistente técnico de INSPOL."},
                 {"role": "user", "content": data.consulta}
             ],
-            max_tokens=1024
+            max_tokens=800
         )
 
-        return {
-            "reply": response.choices[0].message.content
-        }
+        return {"reply": response.choices[0].message.content}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
