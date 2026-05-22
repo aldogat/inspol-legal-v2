@@ -87,7 +87,7 @@ async def multimodal_chat(consulta: Consulta, db: AsyncSession = Depends(get_db)
         # Obtener historial para contexto
         historial = await db.execute(
             select(Conversacion)
-            .where(Conversacion.user_id == 1)
+            .where(Conversacion.user_id.is_not(None))
             .order_by(Conversacion.created_at.desc())
             .limit(10)
         )
@@ -120,7 +120,7 @@ async def multimodal_chat(consulta: Consulta, db: AsyncSession = Depends(get_db)
 async def obtener_historial(skip: int=0, limit: int=50, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(Conversacion)
-        .where(Conversacion.user_id == 1)
+        .where(Conversacion.user_id.is_not(None))
         .order_by(Conversacion.created_at.asc())
         .offset(skip).limit(limit)
     )
@@ -128,6 +128,6 @@ async def obtener_historial(skip: int=0, limit: int=50, db: AsyncSession = Depen
 
 @router.delete("/historial", status_code=204)
 async def borrar_historial(db: AsyncSession = Depends(get_db)):
-    await db.execute(Conversacion.__table__.delete().where(Conversacion.user_id == 1))
+    await db.execute(Conversacion.__table__.delete().where(Conversacion.user_id.is_not(None)))
     await db.commit()
     return None
