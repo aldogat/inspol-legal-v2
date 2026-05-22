@@ -1,0 +1,16 @@
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY frontend/package.json frontend/yarn.lock* ./
+RUN yarn install --frozen-lockfile
+COPY frontend/ .
+RUN echo "NEXT_PUBLIC_API_URL=https://inspol-legal-ai-backend.onrender.com" > .env.production
+RUN yarn build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+RUN mkdir -p public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+EXPOSE $PORT
+CMD ["sh", "-c", "export PORT=${PORT:-10000} && export HOSTNAME=0.0.0.0 && node server.js"]
