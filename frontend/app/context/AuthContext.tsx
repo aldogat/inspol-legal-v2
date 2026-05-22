@@ -6,7 +6,7 @@ interface User {
   id: number;
   email: string;
   nombre: string;
-  apellido?: string;
+  apellido: string;
   rol: "admin" | "abogado" | "asistente";
 }
 
@@ -14,7 +14,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
-  register: (data: { email: string; password: string; nombre: string; apellido?: string }) => Promise<void>;
+  register: (data: { email: string; password: string; nombre: string; apellido: string }) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("auth_token", res.access_token);
   };
 
-  const register = async (data: { email: string; password: string; nombre: string; apellido?: string }) => {
+  const register = async (data: { email: string; password: string; nombre: string; apellido: string }) => {
     const res = await apiFetch("/api/v1/auth/register", {
       method: "POST",
       body: JSON.stringify(data),

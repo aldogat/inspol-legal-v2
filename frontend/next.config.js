@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // otras configuraciones que tengas...
+  output: 'standalone',
 };
 module.exports = nextConfig;
