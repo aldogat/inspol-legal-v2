@@ -1,6 +1,5 @@
 "use client";
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { apiFetch } from "@/app/lib/api";
 
 interface User {
   id: number;
@@ -34,45 +33,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("auth_token");
-    if (storedToken) {
-      setToken(storedToken);
-      apiFetch("/api/v1/auth/me")
-        .then((data) => setUser(data.user))
-        .catch(() => {
-          localStorage.removeItem("auth_token");
-          setToken(null);
-        })
-        .finally(() => setIsLoading(false));
-    } else {
-      setIsLoading(false);
-    }
+    // Usuario demo automático
+    setUser({
+      id: 1,
+      email: "demo@inspol.com",
+      nombre: "Demo",
+      rol: "admin",
+    });
+    setToken("demo");
+    setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string) => {
-    const res = await apiFetch("/api/v1/auth/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
-    setToken(res.access_token);
-    setUser(res.user);
-    localStorage.setItem("auth_token", res.access_token);
-  };
-
-  const register = async (data: { email: string; password: string; nombre: string; apellido?: string }) => {
-    const res = await apiFetch("/api/v1/auth/register", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-    setToken(res.access_token);
-    setUser(res.user);
-    localStorage.setItem("auth_token", res.access_token);
-  };
-
+  const login = async () => {};
+  const register = async () => {};
   const logout = () => {
-    setToken(null);
-    setUser(null);
-    localStorage.removeItem("auth_token");
+    setUser({
+      id: 1,
+      email: "demo@inspol.com",
+      nombre: "Demo",
+      rol: "admin",
+    });
+    setToken("demo");
   };
 
   return (
