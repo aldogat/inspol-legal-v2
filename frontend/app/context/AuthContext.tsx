@@ -6,7 +6,7 @@ interface User {
   id: number;
   email: string;
   nombre: string;
-  apellido: string;
+  apellido?: string;
   rol: "admin" | "abogado" | "asistente";
 }
 
