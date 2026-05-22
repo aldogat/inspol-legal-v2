@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from app.database import engine
 from app.models.base import Base
-from app.api.v1 import chat, expedientes, clientes, contratos, eventos, finanzas, reportes, auth, estadisticas, archivos, documentos, archivos_contratos, historial, analisis
+from app.api.v1 import chat, expedientes, ia_endpoints, clientes, contratos, eventos, finanzas, reportes, auth, estadisticas, archivos, documentos, archivos_contratos, historial, analisis
 
 load_dotenv()
 app = FastAPI(title="INSPOL")
@@ -40,3 +40,4 @@ async def startup():
 @app.get("/")
 async def root():
     return {"mensaje":"Backend OK"}
+app.include_router(ia_endpoints.router, prefix="/api/v1/analisis", tags=["ia"])
